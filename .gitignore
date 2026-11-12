@@ -8,3 +8,6 @@ export/
 *.db
 *.parquet
 report.csv
+
+outputs/*.log
+outputs/*.flag
