@@ -1,0 +1,6 @@
+# Settings. Thresholds for QC checks will be added here in Phase 2.
+datasets:
+  humanola_sample:
+    camera: observation.images.main_stereo_left
+  humanola_labeled:
+    camera: observation.images.head
