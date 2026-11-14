@@ -1,6 +1,15 @@
-# Settings. Thresholds for QC checks will be added here in Phase 2.
+# Settings: dataset cameras and QC check thresholds.
 datasets:
   humanola_sample:
     camera: observation.images.main_stereo_left
   humanola_labeled:
     camera: observation.images.head
+
+checks:
+  # First guess, from tests on the sample set (blurring good frames with kernels
+  # 11-21 gave scores of 20-190, real frames never went below 150).
+  # Recheck on the labeled set.
+  blur:
+    score_threshold: 100   # a sampled frame is bad if its blur score is below this
+    max_bad_share: 0.10    # the clip fails if more than this share of samples are bad
+    width: 640             # frames are resized to this width before scoring
