@@ -13,3 +13,10 @@ checks:
     score_threshold: 100   # a sampled frame is bad if its blur score is below this
     max_bad_share: 0.10    # the clip fails if more than this share of samples are bad
     width: 640             # frames are resized to this width before scoring
+
+  # First guess, from the sample set: real frames averaged 72-140 (scale 0-255),
+  # so these limits sit well outside that. Recheck on the labeled set.
+  brightness:
+    minimum_brightness: 40   # a sampled frame is too dark if its mean gray value is below this
+    maximum_brightness: 215  # a sampled frame is blown out if its mean gray value is above this
+    max_bad_share: 0.10      # the clip fails if more than this share of samples are bad
