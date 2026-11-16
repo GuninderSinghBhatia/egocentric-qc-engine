@@ -4,6 +4,8 @@ datasets:
     camera: observation.images.main_stereo_left
   humanola_labeled:
     camera: observation.images.head
+  demo:  # built by scripts/make_demo_set.py: one clean clip plus copies with known defects
+    camera: observation.images.main_stereo_left
 
 checks:
   # First guess, from tests on the sample set (blurring good frames with kernels
@@ -20,3 +22,35 @@ checks:
     minimum_brightness: 40   # a sampled frame is too dark if its mean gray value is below this
     maximum_brightness: 215  # a sampled frame is blown out if its mean gray value is above this
     max_bad_share: 0.10      # the clip fails if more than this share of samples are bad
+
+  # First guess: a lost frame is gone for good, so this is much stricter than
+  # blur/brightness. The sample clips had no drops at all. Recheck on the labeled set.
+  frame_drops:
+    max_dropped_share: 0.01  # the clip fails if more than this share of its frames were lost
+
+  # Target spec for delivered clips. First guess (no buyer spec yet): at least Full HD,
+  # 30 fps; the tolerance lets 29.97 fps through. Both Humanola sets meet it.
+  spec:
+    min_width: 1920
+    min_height: 1080
+    fps: 30
+    fps_tolerance: 0.1
+
+  # From the sample set: a sampled frame never differed from the next frame by less than
+  # 0.41 (median 1.2-6.6), while a repeated frame scores ~0. Recheck on the labeled set.
+  frozen:
+    difference_threshold: 0.1  # a sample is frozen if it differs from the next frame by less than this
+    max_bad_share: 0.05        # the clip fails if more than this share of samples are frozen
+    width: 160                 # frames are shrunk to this width before comparing
+
+  # Any frame the header promises but that cannot be decoded fails the clip.
+  corrupt:
+    every_nth: 30        # decode one frame in this many (about 1 per second at 30 fps)
+    max_bad_share: 0.0   # the clip fails on any undecodable sampled frame
+
+  # Phase 3 (minimal): hands must be in view, or the clip shows a robot nothing to learn.
+  # First guess; set from the sample set's measured visibility. Recheck on the labeled set.
+  hands:
+    model_path: models/hand_landmarker.task  # MediaPipe hand landmarker (git-ignored, see Phase 0)
+    width: 640              # frames are shrunk to this width before detection
+    max_bad_share: 0.5      # the clip fails if more than this share of samples show no hand
