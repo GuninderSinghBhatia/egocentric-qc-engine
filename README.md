@@ -9,9 +9,11 @@ once, runs seven checks, and gives each clip a pass/fail verdict with the reason
 second where each problem starts. A Streamlit dashboard shows the results to people who will
 never read the code.
 
-![demo](docs/demo.gif)
+### Demo (73 s): the CLI run, then a dashboard walkthrough
 
-Full demo video (CLI run + dashboard walkthrough): [`docs/demo.mp4`](docs/demo.mp4)
+![egocentric-qc demo: CLI run on the demo set, then the dashboard](docs/demo.gif)
+
+The same demo as a video file: [`docs/demo.mp4`](docs/demo.mp4)
 
 ## What it checks
 
